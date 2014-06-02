@@ -17,6 +17,7 @@ import org.sonatype.nexus.configuration.model.CRepositoryExternalConfigurationHo
 import org.sonatype.nexus.configuration.model.DefaultCRepository;
 import org.sonatype.nexus.proxy.maven.maven2.Maven2ContentClass;
 import org.sonatype.nexus.proxy.repository.RepositoryWritePolicy;
+import org.sonatype.nexus.proxy.repository.ShadowRepository;
 import org.sonatype.nexus.templates.repository.AbstractRepositoryTemplate;
 import org.sonatype.nexus.templates.repository.AbstractRepositoryTemplateProvider;
 
@@ -34,7 +35,7 @@ public class UnzipRepositoryTemplate extends AbstractRepositoryTemplate {
 
         repo.setId("");
         repo.setName("");
-        repo.setProviderRole(UnzipRepository.class.getName());
+        repo.setProviderRole(ShadowRepository.class.getName());
         repo.setProviderHint(DefaultUnzipRepository.REPOSITORY_HINT);
 
         final Xpp3Dom ex = new Xpp3Dom(DefaultCRepository.EXTERNAL_CONFIGURATION_NODE_NAME);

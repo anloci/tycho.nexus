@@ -11,208 +11,237 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipse.tycho.nexus</groupId>
+    <artifactId>unzip-repository-plugin-parent</artifactId>
+    <version>0.14.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<groupId>org.eclipse.tycho.nexus</groupId>
-	<artifactId>unzip-repository-plugin-parent</artifactId>
-	<version>0.14.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <inceptionYear>2010</inceptionYear>
+    <url>http://www.eclipse.org/tycho/</url>
+    <scm>
+        <url>https://github.com/anloci/tycho.nexus</url>
+        <connection>scm:git:https://github.com/anloci/tycho.nexus.git</connection>
+        <developerConnection>scm:git:git@github.com:anloci/tycho.nexus.git</developerConnection>
+    </scm>
+    <ciManagement>
+        <system>hudson</system>
+        <url>https://hudson.eclipse.org/hudson</url>
+    </ciManagement>
+    <licenses>
+        <license>
+            <name>Eclipse Public License</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>Eclipse Foundation</name>
+        <url>http://www.eclipse.org/</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Igor Fedorenko</name>
+            <organization>Sonatype</organization>
+            <organizationUrl>http://www.sonatype.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Tobias Oberlies</name>
+            <organization>SAP</organization>
+            <organizationUrl>http://www.sap.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jan Sievers</name>
+            <organization>SAP</organization>
+            <organizationUrl>http://www.sap.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Angel Lopez-Cima</name>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>Bugzilla</system>
+        <url>https://bugs.eclipse.org/bugs/buglist.cgi?product=Tycho&amp;component=Nexus%20Plugins</url>
+    </issueManagement>
 
-	<inceptionYear>2010</inceptionYear>
-	<url>http://www.eclipse.org/tycho/</url>
-	<scm>
-		<url>http://git.eclipse.org/c/tycho/org.eclipse.tycho.nexus.git/</url>
-		<connection>scm:git:http://git.eclipse.org/gitroot/tycho/org.eclipse.tycho.nexus.git</connection>
-		<developerConnection>scm:git:ssh://git.eclipse.org/gitroot/tycho/org.eclipse.tycho.nexus.git</developerConnection>
-	</scm>
-	<ciManagement>
-		<system>hudson</system>
-		<url>https://hudson.eclipse.org/hudson</url>
-	</ciManagement>
-	<licenses>
-		<license>
-			<name>Eclipse Public License</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
-		</license>
-	</licenses>
-	<organization>
-		<name>Eclipse Foundation</name>
-		<url>http://www.eclipse.org/</url>
-	</organization>
-	<developers>
-		<developer>
-			<name>Igor Fedorenko</name>
-			<organization>Sonatype</organization>
-			<organizationUrl>http://www.sonatype.com</organizationUrl>
-		</developer>
-		<developer>
-			<name>Tobias Oberlies</name>
-			<organization>SAP</organization>
-			<organizationUrl>http://www.sap.com</organizationUrl>
-		</developer>
-		<developer>
-			<name>Jan Sievers</name>
-			<organization>SAP</organization>
-			<organizationUrl>http://www.sap.com</organizationUrl>
-		</developer>
-	</developers>
-	<issueManagement>
-		<system>Bugzilla</system>
-		<url>https://bugs.eclipse.org/bugs/buglist.cgi?product=Tycho&amp;component=Nexus%20Plugins</url>
-	</issueManagement>
-
-	<name>Nexus Unzip Plugin - Parent (Incubation)</name>
-	<description>
+    <name>Nexus Unzip Plugin - Parent (Incubation)</name>
+    <description>
 	The Unzip Repository is a Nexus repository type that shadows the build results of a standard 
 	Maven 2 repository and allows to browse into zip and jar artifacts. 
 	The use case for Tycho is to to offer p2 repositories that were build with Tycho and deployed 
 	to Nexus as zip so that other Tycho projects can reference them.
 	</description>
 
-	<properties>
-		<!-- nexus version we compile against -->
-		<nexus.version>2.7.0-01</nexus.version>
-		<!-- minimum nexus version to run ITs against -->
-		<nexus.test.min.version>${nexus.version}</nexus.test.min.version>
-		<!-- maximum nexus version to run ITs against -->
-		<nexus.test.max.version>2.7.2-03</nexus.test.max.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+    <properties>
+        <!-- nexus version we compile against -->
+        <nexus.version>2.8.0-05</nexus.version>
+        <!-- minimum nexus version to run ITs against -->
+        <nexus.test.min.version>${nexus.version}</nexus.test.min.version>
+        <!-- maximum nexus version to run ITs against -->
+        <nexus.test.max.version>2.8.0-05</nexus.test.max.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-	<repositories>
-		<repository>
-			<id>repository.sonatype.org</id>
-			<url>https://repository.sonatype.org/content/groups/forge/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>repository.sonatype.org</id>
-			<url>https://repository.sonatype.org/content/groups/forge/</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <repositories>
+        <repository>
+            <id>repository.sonatype.org</id>
+            <url>https://repository.sonatype.org/content/groups/forge/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository.sonatype.org</id>
+            <url>https://repository.sonatype.org/content/groups/forge/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<modules>
-		<module>unzip-repository-plugin</module>
-		<module>unzip-repository-plugin-its</module>
-	</modules>
+    <modules>
+        <module>unzip-repository-plugin</module>
+        <!-- FIXME: fix the integration tests to work with Nexus OSS 2.8.0-05 -->
+<!--         <module>unzip-repository-plugin-its</module> -->
+    </modules>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
 			<!-- plexus-utils are provided by Nexus -> mark as "provided", otherwise 
 				they will be packaged into the plugin archive and this can lead to runtime 
 				version mismatches! -->
-			<dependency>
-				<groupId>org.codehaus.plexus</groupId>
-				<artifactId>plexus-utils</artifactId>
-				<version>2.0.5</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-artifact</artifactId>
-				<version>3.0.4</version>
-			</dependency>
-			<!-- Main plugin API, pulling in what is needed -->
-			<dependency>
-				<groupId>org.sonatype.nexus</groupId>
-				<artifactId>nexus-plugin-api</artifactId>
-				<version>${nexus.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- test dependencies -->
-			<dependency>
-				<groupId>org.sonatype.nexus</groupId>
-				<artifactId>nexus-testsuite-support</artifactId>
-				<version>${nexus.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.sonatype.nexus</groupId>
-				<artifactId>nexus-test-common</artifactId>
-				<version>${nexus.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.11</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>easymock</artifactId>
-				<version>3.1</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>2.0.5</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-artifact</artifactId>
+                <version>3.0.4</version>
+            </dependency>
+            <!-- Main plugin API, pulling in what is needed -->
+            <dependency>
+                <groupId>org.sonatype.nexus</groupId>
+                <artifactId>nexus-plugin-api</artifactId>
+                <version>${nexus.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.sonatype.nexus.plugins</groupId>
+                <artifactId>nexus-ui-extjs3-plugin</artifactId>
+                <version>${nexus.version}</version>
+                <type>nexus-plugin</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.sonatype.nexus.plugins</groupId>
+                <artifactId>nexus-ui-extjs3-plugin</artifactId>
+                <version>${nexus.version}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <!-- test dependencies -->
+            <dependency>
+                <groupId>org.sonatype.nexus</groupId>
+                <artifactId>nexus-testsuite-support</artifactId>
+                <version>${nexus.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.sonatype.nexus</groupId>
+                <artifactId>nexus-test-common</artifactId>
+                <version>${nexus.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>3.1</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.5.1</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.nexus</groupId>
+                    <artifactId>nexus-plugin-bundle-maven-plugin</artifactId>
+                    <version>1.2</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <bannedRootArtifactId>org.sonatype.nexus:nexus-plugin-api:jar:${nexus.version}</bannedRootArtifactId>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-	<profiles>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>2.2.1</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<!-- see https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven -->
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.4</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.9</version>
-						<executions>
-							<execution>
-								<id>javadoc-jar</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- see https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9</version>
+                        <executions>
+                            <execution>
+                                <id>javadoc-jar</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

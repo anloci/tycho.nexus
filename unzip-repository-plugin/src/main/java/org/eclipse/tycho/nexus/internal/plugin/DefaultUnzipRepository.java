@@ -13,18 +13,21 @@ package org.eclipse.tycho.nexus.internal.plugin;
 import java.io.File;
 import java.util.Arrays;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.enterprise.inject.Typed;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.eclipse.sisu.Description;
 import org.eclipse.tycho.nexus.internal.plugin.cache.ConversionResult;
 import org.eclipse.tycho.nexus.internal.plugin.cache.RequestPathConverter;
 import org.eclipse.tycho.nexus.internal.plugin.cache.UnzipCache;
 import org.eclipse.tycho.nexus.internal.plugin.storage.Util;
 import org.eclipse.tycho.nexus.internal.plugin.storage.ZipAwareStorageCollectionItem;
 import org.eclipse.tycho.nexus.internal.plugin.storage.ZippedItem;
+import org.slf4j.Logger;
 import org.sonatype.nexus.ApplicationStatusSource;
 import org.sonatype.nexus.SystemState;
-import org.sonatype.nexus.configuration.Configurator;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryExternalConfigurationHolderFactory;
 import org.sonatype.nexus.proxy.IllegalOperationException;
@@ -38,6 +41,8 @@ import org.sonatype.nexus.proxy.item.StorageCollectionItem;
 import org.sonatype.nexus.proxy.item.StorageItem;
 import org.sonatype.nexus.proxy.item.StorageLinkItem;
 import org.sonatype.nexus.proxy.registry.ContentClass;
+import org.sonatype.nexus.proxy.registry.RepositoryRegistry;
+import org.sonatype.nexus.proxy.repository.AbstractRepositoryConfigurator;
 import org.sonatype.nexus.proxy.repository.AbstractShadowRepository;
 import org.sonatype.nexus.proxy.repository.DefaultRepositoryKind;
 import org.sonatype.nexus.proxy.repository.IncompatibleMasterRepositoryException;
@@ -60,38 +65,37 @@ import com.google.common.eventbus.Subscribe;
  * 2. files and folders in an archive can be browsed under the path of the archive + slash + path
  * within archive
  */
-/*
- * Within Nexus 1.6 the plugin worked without the annotation. Within Nexus 1.7 is still working, but
- * a warning is logged that the plugin misses to register it's type correctly.
- * 
- * Reference: Nexus Book - Chapter 18. Developing Nexus Plugins -
- * http://www.sonatype.com/books/nexus-book/reference/plugdev.html The documentation describes to
- * tag the repository interface (UnzipRepository) with the RepositoryType annotation. This does not
- * work as described. (Neither with 1.6, nor with 1.7) Tagging the implementation class works in
- * Nexus 1.7 as described. (incl. the promised repository appearance in .../nexus/content..) Within
- * Nexus 1.6 an exception will be logged during startup, but the plugin still works functional
- * correct.
- */
-@Component(role = UnzipRepository.class, hint = DefaultUnzipRepository.REPOSITORY_HINT, instantiationStrategy = "per-lookup", description = "Unzip Repository")
-public class DefaultUnzipRepository extends AbstractShadowRepository implements UnzipRepository {
+@Named(DefaultUnzipRepository.REPOSITORY_HINT)
+@Description("Unzip Repository")
+@Typed(ShadowRepository.class)
+public class DefaultUnzipRepository extends AbstractShadowRepository implements UnzipRepository, ShadowRepository {
     static final String REPOSITORY_HINT = "org.eclipse.tycho.nexus.plugin.DefaultUnzipRepository";
 
-    @Requirement
-    private UnzipRepositoryConfigurator configurator;
+    private final UnzipRepositoryConfigurator configurator;
 
-    @Requirement(hint = "maven2")
-    private ContentClass contentClass;
+    private final ContentClass contentClass;
 
-    @Requirement(hint = "maven2")
-    private ContentClass masterContentClass;
+    private final ContentClass masterContentClass;
 
-    @Requirement
-    private ApplicationStatusSource statusSource;
+    private final ApplicationStatusSource statusSource;
 
     private RepositoryKind repositoryKind;
     private UnzipCache cache;
     private boolean processedNexusStartedEvent = false;
     private boolean isMasterAvailable = false;
+
+    private final RepositoryRegistry repositoryRegistry;
+
+    @Inject
+    public DefaultUnzipRepository(final RepositoryRegistry repositoryRegistry,
+            final UnzipRepositoryConfigurator configurator, @Named("maven2") final ContentClass contentClass,
+            @Named("maven2") final ContentClass masterContentClass, final ApplicationStatusSource statusSource) {
+        this.repositoryRegistry = repositoryRegistry;
+        this.configurator = configurator;
+        this.contentClass = contentClass;
+        this.masterContentClass = masterContentClass;
+        this.statusSource = statusSource;
+    }
 
     // If a class instance of DefaultUnzipRepository is created before Nexus startup finished the field statusSource gets
     // and keeps an invalid proxy instance from plexus which always throws an IllegalStateException if being asked
@@ -117,7 +121,7 @@ public class DefaultUnzipRepository extends AbstractShadowRepository implements 
     }
 
     @Override
-    protected Configurator getConfigurator() {
+    protected AbstractRepositoryConfigurator getConfigurator() {
         return configurator;
     }
 
@@ -163,24 +167,6 @@ public class DefaultUnzipRepository extends AbstractShadowRepository implements 
      * avoiding error logs.
      */
     @Override
-    public void setMasterRepositoryId(final String id) throws NoSuchRepositoryException,
-            IncompatibleMasterRepositoryException {
-        try {
-            Repository repository = getRepositoryRegistry().getRepository(id);
-            super.setMasterRepository(repository);
-            isMasterAvailable = true;
-        } catch (final NoSuchRepositoryException e) {
-            if (isNexusStarted()) {
-                throw e;
-            } else {
-                // NoSuchRepositoryException yet. Just remember the id
-                getExternalConfiguration(true).setMasterRepositoryId(id);
-            }
-        }
-    }
-
-    // see comment at setMasterRepositoryId(String id)
-    @Override
     public void setMasterRepository(final Repository masterRepository) throws IncompatibleMasterRepositoryException {
         super.setMasterRepository(masterRepository);
         isMasterAvailable = true;
@@ -218,7 +204,8 @@ public class DefaultUnzipRepository extends AbstractShadowRepository implements 
         if (!isMasterAvailable) {
             String repositoryId = getExternalConfiguration(false).getMasterRepositoryId();
             try {
-                setMasterRepositoryId(repositoryId);
+                Repository masterRepository = getRepositoryRegistry().getRepository(repositoryId);
+                setMasterRepository(masterRepository);
             } catch (NoSuchRepositoryException e) {
                 getLogger().error("[" + repositoryId + "] " + "cannot set master repository " + e.getMessage());
 
@@ -229,12 +216,21 @@ public class DefaultUnzipRepository extends AbstractShadowRepository implements 
         processedNexusStartedEvent = true;
     }
 
+    protected Logger getLogger() {
+        return this.log;
+    }
+
+    protected RepositoryRegistry getRepositoryRegistry() {
+        return this.repositoryRegistry;
+    }
+
     @Subscribe
     public void onRepositoryRegistryEventAdd(RepositoryRegistryEventAdd evt) {
         final String eventRepositoryId = evt.getRepository().getId();
         if (super.getMasterRepository() != null && eventRepositoryId.equals(super.getMasterRepository().getId())) {
             try {
-                setMasterRepositoryId(eventRepositoryId);
+                Repository masterRepository = getRepositoryRegistry().getRepository(eventRepositoryId);
+                setMasterRepository(masterRepository);
             } catch (final NoSuchRepositoryException e) {
                 getLogger().warn("Master Repository not available", e);
             } catch (final IncompatibleMasterRepositoryException e) {

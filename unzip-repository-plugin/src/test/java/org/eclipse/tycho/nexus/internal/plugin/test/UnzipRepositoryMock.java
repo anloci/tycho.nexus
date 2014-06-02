@@ -32,7 +32,7 @@ public class UnzipRepositoryMock extends DefaultUnzipRepository {
 
     private UnzipRepositoryMock(final Repository masterRepository, LinkPersister linkPersister,
             RepositoryItemUidFactory repositoryItemUidFactory) {
-        super();
+        super(null, null, null, null, null);
         this.masterRepository = masterRepository;
         this.localStorage = new FSLocalRepositoryStorageMock(linkPersister);
         this.repositoryItemUidFactory = repositoryItemUidFactory;

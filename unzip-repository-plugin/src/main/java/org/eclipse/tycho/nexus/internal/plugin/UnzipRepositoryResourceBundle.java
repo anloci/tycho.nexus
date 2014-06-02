@@ -13,20 +13,26 @@ package org.eclipse.tycho.nexus.internal.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.sonatype.nexus.plugins.rest.DefaultStaticResource;
-import org.sonatype.nexus.plugins.rest.NexusResourceBundle;
-import org.sonatype.nexus.plugins.rest.StaticResource;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
-@Component(role = NexusResourceBundle.class, hint = "UnzipRepositoryResourceBundle")
-public class UnzipRepositoryResourceBundle implements NexusResourceBundle {
+import org.sonatype.nexus.plugin.support.UrlWebResource;
+import org.sonatype.nexus.web.WebResource;
+import org.sonatype.nexus.web.WebResourceBundle;
+
+@Named("UnzipRepositoryResourceBundle")
+@Singleton
+public class UnzipRepositoryResourceBundle implements WebResourceBundle {
     public static final String JS_SCRIPT_PATH = "js/unzip/unzip-repo.js";
+    public static final String JS_SCRIPT_BOOT_PATH = "unzip-repository-plugin-boot.js";
 
-    public List<StaticResource> getContributedResouces() {
-        final List<StaticResource> result = new ArrayList<StaticResource>();
+    public List<WebResource> getResources() {
+        final List<WebResource> result = new ArrayList<WebResource>();
 
-        result.add(new DefaultStaticResource(getClass().getResource("/resources/js/unzip-repo.js"), "/"
+        result.add(new UrlWebResource(getClass().getResource("/static/js/unzip-repo.js"), "/"
                 + JS_SCRIPT_PATH, "application/x-javascript"));
+        result.add(new UrlWebResource(getClass().getResource("/static/js/unzip-repository-plugin-boot.js"), "/"
+                + JS_SCRIPT_BOOT_PATH, "application/x-javascript"));
 
         return result;
     }

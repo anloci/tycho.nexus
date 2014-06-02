@@ -26,7 +26,7 @@ import org.sonatype.nexus.proxy.RequestContext;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
 import org.sonatype.nexus.proxy.item.DefaultStorageCollectionItem;
 import org.sonatype.nexus.proxy.item.DefaultStorageFileItem;
-import org.sonatype.nexus.util.ItemPathUtils;
+import org.sonatype.nexus.util.PathUtils;
 
 @SuppressWarnings("nls")
 public class ZippedItemTest extends UnzipPluginTestSupport {
@@ -133,14 +133,14 @@ public class ZippedItemTest extends UnzipPluginTestSupport {
         final String pathInZip = "dir/";
         final ZippedItem zippedItem = createZippedItem(pathInZip);
 
-        Assert.assertEquals(ItemPathUtils.cleanUpTrailingSlash(pathInZip), zippedItem.getPathInZip());
-        Assert.assertEquals(ItemPathUtils.cleanUpTrailingSlash(pathToUnzippedArchive + "/" + pathInZip),
+        Assert.assertEquals(PathUtils.cleanUpTrailingSlash(pathInZip), zippedItem.getPathInZip());
+        Assert.assertEquals(PathUtils.cleanUpTrailingSlash(pathToUnzippedArchive + "/" + pathInZip),
                 zippedItem.getPath());
         Assert.assertNull(zippedItem.getMimeType());
 
         final DefaultStorageCollectionItem zippedStorageItem = (DefaultStorageCollectionItem) zippedItem
                 .getZippedStorageItem();
-        Assert.assertEquals(ItemPathUtils.cleanUpTrailingSlash(pathToUnzippedArchive + "/" + pathInZip),
+        Assert.assertEquals(PathUtils.cleanUpTrailingSlash(pathToUnzippedArchive + "/" + pathInZip),
                 zippedStorageItem.getPath());
     }
 

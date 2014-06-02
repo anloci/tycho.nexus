@@ -26,7 +26,7 @@ import org.sonatype.nexus.proxy.item.StorageItem;
 import org.sonatype.nexus.proxy.storage.UnsupportedStorageOperationException;
 import org.sonatype.nexus.proxy.storage.local.LocalRepositoryStorage;
 import org.sonatype.nexus.proxy.storage.local.fs.DefaultFSLocalRepositoryStorage;
-import org.sonatype.nexus.util.ItemPathUtils;
+import org.sonatype.nexus.util.PathUtils;
 
 public class UnzipCache {
 
@@ -132,7 +132,7 @@ public class UnzipCache {
     }
 
     private static String getRequestPathParent(final String path) {
-        return ItemPathUtils.getParentPath(path) + ItemPathUtils.PATH_SEPARATOR;
+        return PathUtils.getParentPath(path) + PathUtils.PATH_SEPARATOR;
     }
 
     private StorageItem retrieveItemFromMaster(final ResourceStoreRequest masterRepositoryRequest)

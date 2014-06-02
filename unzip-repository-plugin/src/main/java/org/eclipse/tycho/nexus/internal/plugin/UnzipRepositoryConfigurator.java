@@ -10,7 +10,9 @@
  *******************************************************************************/
 package org.eclipse.tycho.nexus.internal.plugin;
 
-import org.codehaus.plexus.component.annotations.Component;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.ExternalConfiguration;
 import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
@@ -18,7 +20,8 @@ import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 import org.sonatype.nexus.proxy.repository.AbstractShadowRepositoryConfigurator;
 import org.sonatype.nexus.proxy.repository.Repository;
 
-@Component(role = UnzipRepositoryConfigurator.class)
+@Named
+@Singleton
 public class UnzipRepositoryConfigurator extends AbstractShadowRepositoryConfigurator {
 
     @Override
