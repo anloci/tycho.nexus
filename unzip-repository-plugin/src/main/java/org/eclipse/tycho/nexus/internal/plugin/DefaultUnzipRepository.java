@@ -30,6 +30,7 @@ import org.sonatype.nexus.ApplicationStatusSource;
 import org.sonatype.nexus.SystemState;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryExternalConfigurationHolderFactory;
+import org.sonatype.nexus.plugins.RepositoryType;
 import org.sonatype.nexus.proxy.IllegalOperationException;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
 import org.sonatype.nexus.proxy.LocalStorageException;
@@ -68,6 +69,7 @@ import com.google.common.eventbus.Subscribe;
 @Named(DefaultUnzipRepository.REPOSITORY_HINT)
 @Description("Unzip Repository")
 @Typed(ShadowRepository.class)
+@RepositoryType(pathPrefix = "unzip")
 public class DefaultUnzipRepository extends AbstractShadowRepository implements ShadowRepository, UnzipRepository {
     static final String REPOSITORY_HINT = "org.eclipse.tycho.nexus.plugin.DefaultUnzipRepository";
 
