@@ -68,7 +68,7 @@ import com.google.common.eventbus.Subscribe;
 @Named(DefaultUnzipRepository.REPOSITORY_HINT)
 @Description("Unzip Repository")
 @Typed(ShadowRepository.class)
-public class DefaultUnzipRepository extends AbstractShadowRepository implements UnzipRepository, ShadowRepository {
+public class DefaultUnzipRepository extends AbstractShadowRepository implements ShadowRepository, UnzipRepository {
     static final String REPOSITORY_HINT = "org.eclipse.tycho.nexus.plugin.DefaultUnzipRepository";
 
     private final UnzipRepositoryConfigurator configurator;
